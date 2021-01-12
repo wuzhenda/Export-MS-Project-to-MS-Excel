@@ -9,7 +9,7 @@ Enum XlLineStyle
      xlDouble = -4119     'Double line.
      xlLineStyleNone = -4142  'No line.
      xlSlantDashDot = 13  'Slanted dashes.
- End Enum
+End Enum
  
 Enum XlBordersIndex
     xlDiagonalDown = 5  ' Border running from the upper-left corner to the lower-right of each cell in the range.
@@ -249,8 +249,7 @@ Sub ExportExcel()
     excelapp.ActiveWindow.FreezePanes = False
     mySheet.Cells(5, 4).Select
     excelapp.ActiveWindow.FreezePanes = True
-    
-    
+        
 'Gantt title =======================
 'number of active tasks
     myActiveTaskCount = 0
@@ -260,8 +259,7 @@ Sub ExportExcel()
                 myActiveTaskCount = myActiveTaskCount + 1
             End If
         End If
-    Next myTask
-        
+    Next myTask        
         
     myDate = myStartDate
     startMonth = Month(myDate)
@@ -292,8 +290,7 @@ Sub ExportExcel()
                 .Value = Format(myDate - 1, "mmmm yyyy")
                 .Font.Name = "Times New Roman"
             End With
-            Call myBorders(excelapp.Selection, xlContinuous, XlBorderWeight.xlThin)
-            
+            Call myBorders(excelapp.Selection, xlContinuous, XlBorderWeight.xlThin)            
             
             startMonth = Month(myDate)
             myGanttMonthCount = i
@@ -301,7 +298,6 @@ Sub ExportExcel()
         End If
         
         If Not startYear = Year(myDate) Then
-            
             
             mySheet.Range(mySheet.Cells(1, 8 + myGanttYearCount), mySheet.Cells(1, 8 + i - 1)).Select
             With excelapp.Selection
@@ -599,7 +595,6 @@ End Sub
 'for gantt chart find minimum and maximum project's start and end dates
 Function StartAndEnd()
 
-
 currentLine = 1
 
 Dim myStartDate As Date
@@ -630,21 +625,18 @@ For Each myTask In ActiveProject.Tasks
             End If
             
 ' Debug.Print "==================="
-'  Debug.Print "name: """ & myTask.Name & """"
+' Debug.Print "name: """ & myTask.Name & """"
 ' Debug.Print "unique ID: " & myTask.UniqueID
 ' Debug.Print "outline number: " & myTask.OutlineNumber
 ' Debug.Print "outline level: " & myTask.OutlineLevel
-'  Debug.Print "outline children count: " & myTask.OutlineChildren.Count
-            
-            
-            
+' Debug.Print "outline children count: " & myTask.OutlineChildren.Count
+ 
 '  myTask.ResourceNames
 '  myTask.Predecessors
 '  myTask.UniqueIDPredecessors
-            
-            
-' myTask.OutlineNumber
-' myTask.Name
+
+'  myTask.OutlineNumber
+'  myTask.Name
 '  myTask.Start
 '  myTask.StartText
 '  myTask.Finish
@@ -654,15 +646,13 @@ For Each myTask In ActiveProject.Tasks
 '  myTask.ResourceNames
 '  myTask.Predecessors
 '  myTask.UniqueIDPredecessors
-  
-       
+         
         End If
 
     End If
     
     
 Next myTask
-
     
     Dim res(0 To 1) As Date
     res(0) = myStartDate
