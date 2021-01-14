@@ -51,6 +51,7 @@ End Enum
 
 
 
+
 'for grouping
 Sub myTree(myTask As Task)
     If Not myTask Is Nothing Then
@@ -224,15 +225,16 @@ Sub ExportResouce2Excel()
         .SummaryRow = xlAbove
         .SummaryColumn = xlRight
     End With
- 
+   
     mySheet.Cells(1, 1).Value = "?"
-    mySheet.Cells(1, 2).Value = Application.FieldConstantToFieldName(PjField.pjTaskUniqueID) '"????
-    mySheet.Cells(1, 3).Value = Application.FieldConstantToFieldName(PjField.pjTaskName) '"???? ???"
-    mySheet.Cells(1, 4).Value = Application.FieldConstantToFieldName(PjField.pjTaskStartText) '"???"
-    mySheet.Cells(1, 5).Value = Application.FieldConstantToFieldName(PjField.pjTaskFinish)  '"?????
-    mySheet.Cells(1, 6).Value = Application.FieldConstantToFieldName(PjField.pjTaskDurationText) '"??????"
-    mySheet.Cells(1, 7).Value = Application.FieldConstantToFieldName(PjField.pjTaskResourceNames) '"???? ????"
-    mySheet.Cells(1, 8).Value = Application.FieldConstantToFieldName(PjField.pjTaskPredecessors)  '"????????
+    mySheet.Cells(1, 2).Value = Application.FieldConstantToFieldName(PjField.pjTaskResourceNames) 'human resource
+    mySheet.Cells(1, 3).Value = Application.FieldConstantToFieldName(PjField.pjTaskName) 'outlineparent task name
+    mySheet.Cells(1, 4).Value = Application.FieldConstantToFieldName(PjField.pjTaskUniqueID) 'task uid
+    mySheet.Cells(1, 5).Value = Application.FieldConstantToFieldName(PjField.pjTaskName) 'sub-task name
+    mySheet.Cells(1, 6).Value = Application.FieldConstantToFieldName(PjField.pjTaskStartText) 'task-start
+    mySheet.Cells(1, 7).Value = Application.FieldConstantToFieldName(PjField.pjTaskFinish)  'task-finish
+    mySheet.Cells(1, 8).Value = Application.FieldConstantToFieldName(PjField.pjTaskDurationText) 'task-duration
+    
     
 
     Call myFormat(excelapp, mySheet, mySheet.Cells(1, 1), mySheet.Cells(4, 1), True, 11, RGB(223, 227, 232))
@@ -247,12 +249,13 @@ Sub ExportResouce2Excel()
 'some usefull freezing
     mySheet.Activate
     excelapp.ActiveWindow.FreezePanes = False
-    mySheet.Cells(5, 4).Select
+    mySheet.Cells(5, 6).Select
     excelapp.ActiveWindow.FreezePanes = True
         
 'Gantt title =======================
 'number of active tasks
     myActiveTaskCount = 0
+'number of human resource
     myResourceCount = 0
     For Each myTask In ActiveProject.Tasks
         If Not myTask Is Nothing Then
@@ -371,7 +374,9 @@ Sub ExportResouce2Excel()
             excelapp.Selection.Interior.Color = RGB(223, 227, 232)
         End If
         
-        mySheet.Cells(4, 8 + i).Value = Left(WeekdayName(Weekday(myDate, vbUseSystemDayOfWeek), True, vbUseSystemDayOfWeek), 1) 'was myDate
+        'mySheet.Cells(4, 8 + i).Value = Left(WeekdayName(Weekday(myDate, vbUseSystemDayOfWeek), True, vbUseSystemDayOfWeek), 1) 'was myDate
+        'get weekday name,may be second char better in Chinese
+        mySheet.Cells(4, 8 + i).Value = Left(WeekdayName(Weekday(myDate, vbUseSystemDayOfWeek), True, vbUseSystemDayOfWeek), 2)
         mySheet.Cells(4, 8 + i).Select
         With excelapp.Selection
             .HorizontalAlignment = XlHAlign.xlHAlignCenter
@@ -486,19 +491,19 @@ Sub ExportResouce2Excel()
                     Set excelrange = mySheet.Cells(currentLine, 1)
                     excelrange.Value = myTask.ID 'myTask.UniqueID
                     
-                    mySheet.Cells(currentLine, 2).Value = "'" + myTask.OutlineNumber
-                    mySheet.Cells(currentLine, 3).Value = AutoIndent(myTask.OutlineLevel) + myTask.Name
-    '  myTask.Start
-                    mySheet.Cells(currentLine, 4).Value = myTask.StartText
-    '  myTask.Finish
-                    mySheet.Cells(currentLine, 5).Value = myTask.FinishText
-                    
-                    mySheet.Cells(currentLine, 6).Value = myTask.DurationText
-                    mySheet.Cells(currentLine, 7).Value = myResource.Name
+                    mySheet.Cells(currentLine, 2).Value = myResource.Name
                     'mySheet.Cells(currentLine, 8).Value = myTask.Predecessors
-                    mySheet.Cells(currentLine, 8).Value = myTask.OutlineParent.Name
+                    mySheet.Cells(currentLine, 3).Value = myTask.OutlineParent.Name
     '   mySheet.Cells(currentLine, 8).Value = myTask.UniqueIDPredecessors
     '    mySheet.Cells(currentLine, 9).Value = myTask.ID
+                    
+                    mySheet.Cells(currentLine, 4).Value = "'" + myTask.OutlineNumber
+                    mySheet.Cells(currentLine, 5).Value = AutoIndent(myTask.OutlineLevel) + myTask.Name
+    '  myTask.Start
+                    mySheet.Cells(currentLine, 6).Value = myTask.StartText
+    '  myTask.Finish
+                    mySheet.Cells(currentLine, 7).Value = myTask.FinishText
+                    mySheet.Cells(currentLine, 8).Value = myTask.DurationText
                     
                     
                     myBold = False
@@ -637,5 +642,6 @@ Function StartAndEnd()
     StartAndEnd = res
     
 End Function
+
 
 
